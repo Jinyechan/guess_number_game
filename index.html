@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숫자 맞추기 게임</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .game-container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+
+        .game-container h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .game-container input[type="number"] {
+            width: 277px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .game-container button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .game-container button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>숫자 맞추기 게임</h1>
+        <p>1에서 100 사이의 숫자를 맞춰보세요!</p>
+        <input type="number" id="userGuess" placeholder="숫자를 입력하세요" min="1" max="100">
+        <button onclick="playGame()">맞추기</button>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 10;
+
+        function playGame() {
+            const userGuess = document.getElementById("userGuess").value;
+            const message = document.getElementById("message");
+
+            // 입력값이 빈 값인지 확인
+            if (userGuess === "") {
+                message.textContent = "숫자를 입력하세요.";
+                return;
+            }
+
+            const guess = Number(userGuess);
+
+            // 유효한 숫자인지 확인
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                message.textContent = "1에서 100 사이의 유효한 숫자를 입력하세요.";
+                return;
+            }
+
+            // 정답 확인
+            if (guess === randomNumber) {
+                message.textContent = "정답입니다!";
+                message.style.color = "green";
+                disableGame();
+            } else {
+                attempts--;
+                if (attempts === 0) {
+                    message.textContent = `실패했습니다! 정답은 ${randomNumber}였습니다.`;
+                    message.style.color = "red";
+                    disableGame();
+                } else {
+                    message.textContent = guess < randomNumber 
+                        ? `입력한 숫자가 정답보다 작습니다. 남은 기회: ${attempts}` 
+                        : `입력한 숫자가 정답보다 큽니다. 남은 기회: ${attempts}`;
+                    message.style.color = "black";
+                }
+            }
+        }
+
+        function disableGame() {
+            document.getElementById("userGuess").disabled = true;
+            document.querySelector("button").disabled = true;
+        }
+    </script>
+</body>
+
+</html>
